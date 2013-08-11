@@ -30,7 +30,7 @@ DATABASES = {
 
 # General settings
 ALLOWED_HOSTS = ['127.0.0.1','localhost']
-TIME_ZONE = 'Finland/Helsinki'
+TIME_ZONE = 'Europe/Helsinki'
 LANGUAGE_CODE = 'fi-FI'
 SITE_ID = 1
 USE_I18N = True
