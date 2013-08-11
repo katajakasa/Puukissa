@@ -7,12 +7,18 @@
 {{ block.super }}
     <script type="text/javascript" charset="utf-8" src="{% static 'libs/ace/ace.js' %}"></script>
     <script type="text/javascript" charset="utf-8" src="{% static 'libs/ace/mode-python.js' %}" ></script>
+    <script type="text/javascript" charset="utf-8" src="{% static 'libs/ace/mode-plain_text.js' %}" ></script>
 {% endblock %}
 
 {% block jquery %}
 {{ block.super }}
         var editor = ace.edit("python_editor");
+{% if lesson.type == 0 %}
         editor.getSession().setMode("ace/mode/python");
+{% else %}
+        editor.getSession().setMode("ace/mode/plain_text");
+        editor.getSession().setUseWrapMode(true);
+{% endif %}
         
         // Definitions ------------------------------------------------------------------
         
@@ -21,8 +27,12 @@
         $('#editor_help').button();
         $('#execute').button();
         $('.hint_button').button();
+{% if lesson.type == 0 %}
         $('#turnin').button({ disabled: true });
-        
+{% else %}
+        $('#turnin').button();
+{% endif %}
+
         // Execute button handler -------------------------------------------------------
         
         $('#execute').click(function() {
@@ -125,6 +135,7 @@
     {{ answer.advice|safe }}
 {% endif %}
     
+{% if lesson.type == 0 %}
     <h3>Oljenkorret</h3>
     <span id="hint_help">Ohje</span>
     {% if hints %}
@@ -141,19 +152,27 @@
     {% else %}
         <p>Tehtävässä ei ole käytettävissä oljenkorsia. Pärjäile! :)</p>
     {% endif %}
+{% endif %}
     
     <h3>Vastaus</h3>
+
+{% if lesson.type == 0 %}
     <span id="execute">Kokeile</span>
+{% endif %}
     <span id="turnin">Palauta vastaus</span>
+{% if lesson.type == 0 %}
     <span id="editor_help">Ohje</span>
+{% endif %}
     
-    <span class="areaheader">Lähdekoodi</span>
+    <span class="areaheader">Syöte</span>
     <div id="python_editor">{{ answer.result }}</div>
     
+{% if lesson.type == 0 %}
     <span class="areaheader">Tuloste</span>
     <div id="python_console">
         <div id="python_console_contents">Konsoli</div>
     </div>
+{% endif %}
 
     <!-- Dialogs -->
     <div id="dialog_help_editor" title="Lähdekoodieditori">

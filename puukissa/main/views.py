@@ -126,21 +126,24 @@ def json_turnin(request):
     if answer.user != request.user:
         raise Http404
     
-    # Run answer through sandbox, and capture stdout
-    stdout_backup = sys.stdout
-    sys.stdout = StringIO()
-    sandbox = Sandbox(SandboxConfig('stdout'))
-    sandbox.execute(result)
-    output = sys.stdout.getvalue()
-    sys.stdout = stdout_backup
-    
-    # Test string
-    test = unicode(output.replace("\r", ""), "utf-8")
-    expect = answer.lesson.expect.replace("\r","")
-    
-    # Test result against expected output
     done = 0
-    if answer.lesson.type == 0 and test == expect:
+    if answer.lesson.type == 0:
+        # Run answer through sandbox, and capture stdout
+        stdout_backup = sys.stdout
+        sys.stdout = StringIO()
+        sandbox = Sandbox(SandboxConfig('stdout'))
+        sandbox.execute(result)
+        output = sys.stdout.getvalue()
+        sys.stdout = stdout_backup
+        
+        # Test string
+        test = unicode(output.replace("\r", ""), "utf-8")
+        expect = answer.lesson.expect.replace("\r","")
+        
+        # Test result against expected output
+        if answer.lesson.type == 0 and test == expect:
+            done = 1
+    else:
         done = 1
     
     # Save answer text to database, just in case
@@ -149,7 +152,7 @@ def json_turnin(request):
         answer.status = 1
     answer.save()
     
-    return JSONResponse({'error': 0, 'done': done, 'redirect': reverse('main:lessons')})
+    return JSONResponse({'done': done, 'redirect': reverse('main:lessons')})
 
 @login_required
 def json_hint(request):
