@@ -3,3 +3,4 @@ puukissa/settings.py
 .settings
 .project
 .pydevproject
+*.pyc
