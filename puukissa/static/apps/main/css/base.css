@@ -1,0 +1,205 @@
+body, html {
+    height: 100%;
+}
+
+body {
+    margin: 0px;
+    padding: 0px;
+    background-color: #e7e7e7;
+    font-size: 14px;
+}
+
+p { line-height: 130%; text-align: justify; font-family: 'Open Sans', sans-serif; }
+strong { font-weight: bold; }
+sup { font-size: 75%; vertical-align: super; }
+sub { font-size: 75%; vertical-align: sub; }
+
+h1 {
+    padding-top: 15px;
+    padding-left: 10px;
+    font-size: 250%;
+    color: #eeeeee;
+    text-shadow: #aaaaaa 0px 0px 3px;
+    font-family: 'Exo', sans-serif;
+    font-weight: bold;
+    letter-spacing: 3px;
+}
+
+h2 {
+    padding: 4px;
+    font-size: 160%;
+    margin-bottom: 1em;
+    font-weight: bold;
+    width: 100%;
+    font-family: 'Open Sans', sans-serif;
+}
+
+h3 {
+    padding: 4px;
+    font-size: 140%;
+    margin-top: 1.5em;
+    margin-bottom: 0.75em;
+    border-bottom: 1px dotted black;
+    font-family: 'Open Sans', sans-serif;
+}
+
+h4 {
+    font-size: 120%;
+    padding: 4px;
+    margin-top: 1.5em;
+    margin-bottom: 0.75em;
+    border-bottom: 1px dotted black;
+    font-family: 'Open Sans', sans-serif;
+}
+
+p,pre,blockquote,ul,ol {
+    margin-top: 0.75em;
+    margin-bottom: 0.75em;
+}
+
+/* ---------- Base layout tuning ---------- */
+
+#body_base,
+.body_limiter {
+    max-width: 1200px;
+    width: 90%;
+    min-width: 550px;
+    margin: 0 auto;
+}
+
+#body_base {
+    height: auto !important;
+    height: 100%;
+    min-height: 100%;
+    background-color: #f9f9f9;
+    box-shadow: 0px 0px 5px #888;
+}
+
+/* ---------- Header ---------- */
+
+#body_header {
+    background: #111121;
+    background: linear-gradient(to bottom, rgba(17,17,57,1) 0%,rgba(17,17,33,1) 100%);
+    height: 60px;
+}
+
+#body_nav {
+    height: 33px;
+    background-color: #111121;
+    padding-left: 5px;
+    box-shadow: 0px 3px 3px #888;
+}
+
+#body_nav li { font-family: 'Open Sans', sans-serif; }
+#body_nav_left { float: left; margin: 0; }
+#body_nav_right { float: right; margin: 0; }
+#body_nav .menuitem { float: left; }
+#body_nav .menuitem a { padding: 9px; }
+#body_nav ul.sub-level span { padding: 9px; }
+#body_nav ul.sub-level { display: none; }
+
+#body_nav li:hover .sub-level {
+    background-color: #18242b;
+    display: block;
+    position: absolute;
+    left: 0px;
+    top: 21px;
+}
+
+#body_nav ul.sub-level li {
+    float: left;
+    width: 150px;
+    border-top: 1px dotted #111111;
+    z-index: 2;
+}
+
+#body_nav ul.sub-level li:first-child { border-top: 0px; }
+
+/* ----------- Some common stuff for menuitems ---------- */
+
+.navmenu-icon-down {
+    float: right;
+    position: relative;
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    margin-left: 6px;
+    background-image: url('../img/arrow_down.png');
+}
+
+.menuitem:hover {
+    background-color: #18242b;
+}
+
+.menuitem a,
+.menuitem span {
+    color: #eeeeee;
+    text-decoration: none;
+    display: block;
+}
+
+.menuitem a:hover { text-shadow: #cccccc 0px 0px 5px; }
+.menuitem:hover { position: relative; }
+ul.sub-level { z-index: 99; }
+
+/* ---------- Contents ---------- */
+
+.errorbox { padding: 5px; }
+
+#body_contents { padding: 1em; padding-top: 1.5em; }
+#body_contents ul,
+#body_contents ol { margin-left: 2em; }
+#body_contents ul { list-style-type: disc; }
+#body_contents ol { list-style-type: decimal; }
+#body_contents ol li,
+#body_contents ul li { margin-top: 0.8em; margin-bottom: 0.8em; font-family: 'Open Sans', sans-serif; }
+
+/* ---------- Generic tables ---------- */
+
+table { border-collapse: collapse; width: 100%; font-family: 'Open Sans', sans-serif; }
+table th, table td { padding: 5px; border: 1px solid rgba(17,17,57,1); }
+table th { background-color: rgba(17,17,57,1); font-weight: bold; color: #eeeeee; text-align: left; }
+table td { background-color: #eeeeee; }
+
+/* ---------- uniForm tweaks ---------- */
+
+form.uniForm { margin-top: 1.0em; font-family: 'Open Sans', sans-serif; }
+form.uniForm .ctrlHolder, form.uniForm .error { border-bottom: 1px dotted #aaaaaa; }
+form.uniForm .buttonHolder { margin: 0; }
+form.uniForm .error { margin: 0.5em; }
+form.uniForm fieldset { border: 1px solid #999999; }
+form.uniForm legend { padding: 0.3em; }
+
+/* ----------- Other stuff ------------ */
+
+#python_editor {
+    width: 100%;
+    position: relative;
+    height: 400px;
+    border: 1px solid black;
+    font-family: monospace !important;
+    font-size: 12px !important;
+    
+    margin-bottom: 1em;
+}
+
+#python_console {
+    width: 100%;
+    height: 120px;
+    border: 1px solid black;
+    overflow: scroll;
+}
+
+#python_console_contents {
+    font-family: monospace;
+    font-size: 12px;
+    margin: 5px;
+}
+
+.areaheader {
+    display: block;
+    font-size: 12px;
+    margin-top: 1em;
+    margin-bottom: 2px;
+    font-family: "Open Sans", sans-serif;
+}

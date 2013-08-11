@@ -1,0 +1,77 @@
+<!DOCTYPE html>{% load static %}{% load url from future %}
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>{% block title %}Pythonkoulu{% endblock %}</title>
+    <meta name="viewport" content="initial-scale=1.0" />
+    
+    <!-- Fonts -->
+	<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans:400,700,800" />
+	<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Exo:400,900" />
+    
+    <!-- Our own stuff -->
+    <link rel="stylesheet" type="text/css" href="{% static 'apps/main/css/reset.css' %}" />
+	<link rel="stylesheet" type="text/css" href="{% static 'apps/main/css/base.css' %}" />
+    
+    <!-- JQuery -->
+    <link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+	<script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.js"></script>
+	<script type="text/javascript" src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+    
+    <!-- Crispy_forms -->
+    <link rel="stylesheet" type="text/css" href="{% static 'uni_form/uni-form.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'uni_form/default.uni-form.css' %}" />
+    <script type="text/javascript" src="{% static 'uni_form/uni-form.jquery.js' %}"></script>
+
+{% block head %}{% endblock %}
+    <script type="text/javascript">
+    $(function() {
+        $('form.uniForm').uniform();
+{% block jquery %}{% endblock %}
+    });
+    </script>
+</head>
+<body>
+    <div id="body_header">
+        <div class="body_limiter">
+            <h1>Pythonkoulu</h1>
+        </div>
+    </div>
+    <div id="body_nav">
+        <div class="body_limiter">
+            <ul id="body_nav_left">
+                <li class="menuitem">
+                    <a href="{% url 'main:index' %}">Etusivu</a>
+                </li>
+{% if user.is_authenticated %}
+                <li class="menuitem">
+                    <a href="{% url 'main:lessons' %}">Tehtävät</a>
+                </li>
+                <li class="menuitem">
+                    <a href="{% url 'main:top' %}">Parhaat</a>
+                </li>
+{% endif %}
+            </ul>
+            <ul id="body_nav_right">
+{% if user.is_authenticated %}
+                <li class="menuitem">
+                    <a href="{% url 'main:profile' %}">Profiili</a>
+                </li>
+                <li class="menuitem">
+                    <a href="{% url 'main:logout' %}">Kirjaudu ulos</a>
+                </li>
+{% else %}
+                <li class="menuitem">
+                    <a href="{% url 'main:login' %}">Kirjaudu sisään</a>
+                </li>
+{% endif %}
+            </ul>
+        </div>
+    </div>
+    <div id="body_base">
+        <div id="body_contents">
+{% block contents %}{% endblock %}
+        </div>
+    </div>
+</body>
+</html>

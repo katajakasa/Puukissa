@@ -1,0 +1,47 @@
+{% extends "main/base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block title %}Tehtävät - {{ block.super }}{% endblock %}
+
+{% block head %}
+{{ block.super }}
+{% endblock %}
+
+{% block jquery %}
+{{ block.super }}
+{% endblock %}
+
+{% block contents %}
+{{ block.super }}
+    <h2>Tehtävät</h2>
+
+{% if lessons %}
+    <table>
+        <tr>
+            <th>#</th>
+            <th>Tehtävä</th>
+            <th>Tila</th>
+            <th>Pisteet</th>
+        </tr>
+{% for lesson in lessons %}
+        <tr>
+            <td>{{ lesson.number }}</td>
+            <td>
+                {{ lesson.name }} 
+                {% if lesson.status == 0 or lesson.status == 1 %}
+                    <a href="{% url 'main:perform' lesson.id %}">Siirry suorittamaan &raquo;</a>
+                {% elif lesson.status == 3 %}
+                    <a href="{% url 'main:perform' lesson.id %}">Siirry korjaamaan &raquo;</a>
+                {% endif %}
+            </td>
+            <td>{{ lesson.formatted_status }}</td>
+            <td>{{ lesson.formatted_score }}</td>
+        </tr>
+{% endfor %}
+    </table>
+{% else %}
+    <p>Ei tehtäviä.</p>
+{% endif %}
+
+{% endblock %}

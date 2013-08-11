@@ -1,0 +1,37 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block title %}Toplista - {{ block.super }}{% endblock %}
+
+{% block head %}
+{{ block.super }}
+{% endblock %}
+
+{% block jquery %}
+{{ block.super }}
+{% endblock %}
+
+{% block contents %}
+{{ block.super }}
+    <h2>Toplista</h2>
+
+{% if top %}
+    <table>
+        <tr>
+            <th>#</th>
+            <th>Nimi</th>
+            <th>Pisteet</th>
+        </tr>
+{% for item in top %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ item.first_name }} {{ item.last_name }}</td>
+            <td>{{ item.score }}</td>
+        </tr>
+{% endfor %}
+    </table>
+{% else %}
+    <p>Ei käyttäjiä.</p>
+{% endif %}
+
+{% endblock %}

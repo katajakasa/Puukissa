@@ -1,0 +1,184 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block title %}Tehtävä #{{ lesson.number }}: {{ lesson.name }} - {{ block.super }}{% endblock %}
+
+{% block head %}
+{{ block.super }}
+    <script type="text/javascript" charset="utf-8" src="{% static 'libs/ace/ace.js' %}"></script>
+    <script type="text/javascript" charset="utf-8" src="{% static 'libs/ace/mode-python.js' %}" ></script>
+{% endblock %}
+
+{% block jquery %}
+{{ block.super }}
+        var editor = ace.edit("python_editor");
+        editor.getSession().setMode("ace/mode/python");
+        
+        // Definitions ------------------------------------------------------------------
+        
+        $('#execute').button();
+        $('#hint_help').button();
+        $('#editor_help').button();
+        $('#execute').button();
+        $('.hint_button').button();
+        $('#turnin').button({ disabled: true });
+        
+        // Execute button handler -------------------------------------------------------
+        
+        $('#execute').click(function() {
+            var content = editor.getValue();
+            $.ajax({
+                type: 'POST',
+                dataType: 'json',
+                url: '{% url 'main:json_execute' %}',
+                data: {
+                    'content': content,
+                    'answer_id': {{ answer.id }},
+                    'csrfmiddlewaretoken': '{{ csrf_token }}',
+                },
+                success: function(data) {
+                    $('#python_console_contents').html(data['output']);
+                    if(data['done'] == 1) {
+                        $('#turnin').button({ disabled: false });
+                    } else {
+                        $('#turnin').button({ disabled: true });
+                    }
+                },
+            });
+        });
+        
+        // Hint handler -----------------------------------------------------------------
+        
+        $('.hint_button').click(function() {
+            var id = $(this).attr('id');
+            $.ajax({
+                type: 'POST',
+                dataType: 'json',
+                url: '{% url 'main:json_hint' %}',
+                data: {
+                    'hint_id': id,
+                    'answer_id': {{ answer.id }},
+                    'csrfmiddlewaretoken': '{{ csrf_token }}',
+                },
+                success: function(data) {
+                    $('#hint_'+id).html(data['hint']);
+                },
+            });
+        });
+        
+        
+        // Turn in button ---------------------------------------------------------------
+        
+        $('#turnin').click(function() {
+            var content = editor.getValue();
+            $.ajax({
+                type: 'POST',
+                dataType: 'json',
+                url: '{% url 'main:json_turnin' %}',
+                data: {
+                    'content': content,
+                    'answer_id': {{ answer.id }},
+                    'csrfmiddlewaretoken': '{{ csrf_token }}',
+                },
+                success: function(data) {
+                    if(data['done'] == 1) {
+                        window.location.href = data['redirect'];
+                    }
+                },
+            });
+        });
+        
+        // Help dialogs -----------------------------------------------------------------
+        
+        $("#dialog_help_editor").dialog({
+            modal: true,
+            autoOpen: false,
+            width: 500,
+            buttons: {
+                Ok: function() { $( this ).dialog("close"); }
+            }
+        });
+        $('#editor_help').click(function() {
+            $("#dialog_help_editor").dialog("open");
+        });
+        $("#dialog_help_hint").dialog({
+            modal: true,
+            autoOpen: false,
+            width: 500,
+            buttons: {
+                Ok: function() { $( this ).dialog("close"); }
+            }
+        });
+        $('#hint_help').click(function() {
+            $("#dialog_help_hint").dialog("open");
+        });
+{% endblock %}
+
+{% block contents %}
+{{ block.super }}
+    <h2>Tehtävä #{{ lesson.number }}: {{ lesson.name }}</h2>
+    <h3>Kuvaus</h3>
+    {{ lesson.description|safe }}
+    
+{% if answer.status == 2 %}
+    <h3>Tarkastajan huomioita</h3>
+    {{ answer.advice|safe }}
+{% endif %}
+    
+    <h3>Oljenkorret</h3>
+    <span id="hint_help">Ohje</span>
+    {% if hints %}
+    {% for hint in hints %}
+        <h4>Oljenkorsi #{{ hint.level }}: {{ hint.name }} (-{{ hint.value }}p)</h4>
+        <div class="lesson_hint_description" id="hint_{{ hint.id }}">
+        {% if hint.is_used %}
+            {{ hint.description|safe }}
+        {% else %}
+            <span class="hint_button" id="{{ hint.id }}">Paljasta</span>
+        {% endif %}
+        </div>
+    {% endfor %}
+    {% else %}
+        <p>Tehtävässä ei ole käytettävissä oljenkorsia. Pärjäile! :)</p>
+    {% endif %}
+    
+    <h3>Vastaus</h3>
+    <span id="execute">Kokeile</span>
+    <span id="turnin">Palauta vastaus</span>
+    <span id="editor_help">Ohje</span>
+    
+    <span class="areaheader">Lähdekoodi</span>
+    <div id="python_editor">{{ answer.result }}</div>
+    
+    <span class="areaheader">Tuloste</span>
+    <div id="python_console">
+        <div id="python_console_contents">Konsoli</div>
+    </div>
+
+    <!-- Dialogs -->
+    <div id="dialog_help_editor" title="Lähdekoodieditori">
+        <p>
+            Lähdekoodieditorissa voit muokata vastauksesi lähdekoodia tai tekstiä. 
+            Mikäli olet tuottamassa ohjelmaa, voit milloin vain kokeilla
+            sen tuottamaa tulostetta painamalla painiketta "Kokeile". Ohjelmasi
+            tuottama tuloste tulee tällöin näkyviin "tuloste"-laatikkoon.
+        </p>
+        <p>
+            Kun ohjelman tuottama tuloste vastaa vaadittua, voit palauttaa
+            vastauksesi painamalla painiketta "Palauta vastaus". Tämän jälkeen
+            vastausta ei voi enää muokata.
+        </p>
+    </div>
+    <div id="dialog_help_hint" title="Oljenkorret">
+        <p>
+            Oljenkorret sisältävät neuvoja tehtävän suorittamiseen, mikäli et muuten
+            keksi sopivaa ratkaisua. Kannattaa huomata, että oljenkorren käyttäminen saattaa
+            "maksaa" pisteitä tehtävän loppuratkaisusta. Kannattaa siis miettiä ensin omin avuin
+            tehtävää!
+        </p>
+        <p>
+            Mikäli haluat käyttää oljenkorren, napsauta hiirellä sopivalta kuulostavaa
+            oljenkorsilaatikkoa.
+        </p>
+    </div>
+{% endblock %}
