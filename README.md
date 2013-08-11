@@ -39,4 +39,4 @@ Onelineri kirjastojen asentamiseen
 ----------------------------------
 Seuraava koodirimpsu hakee kaikki tarpeelliset python-kirjastot ja dependenssit.
 
-    pip install django django-openid-auth python-openid south django-crispy-forms pil pysandbox
+    pip install django django-openid-auth python-openid south django-crispy-forms pysandbox django-tinymce
