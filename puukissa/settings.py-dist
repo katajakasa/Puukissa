@@ -47,6 +47,14 @@ STATIC_URL = '/static/'
 CRISPY_FAIL_SILENTLY = not DEBUG
 CRISPY_TEMPLATE_PACK = 'uni_form'
 
+# TinyMCE config for admin panel
+TINYMCE_DEFAULT_CONFIG = {
+    'plugins': "table,xhtmlxtras,paste,searchreplace",
+    'theme': "advanced",
+    'cleanup_on_startup': True,
+    'custom_undo_redo_levels': 10,
+}
+
 # OpenID Auth
 LOGIN_URL = '/main/login/'
 LOGIN_REDIRECT_URL = '/'
