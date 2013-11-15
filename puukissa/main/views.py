@@ -85,7 +85,7 @@ def json_execute(request):
     # Run answer through sandbox, and capture stdout
     stdout_backup = sys.stdout
     sys.stdout = StringIO()
-    sandbox = Sandbox(SandboxConfig('stdout'))
+    sandbox = Sandbox(SandboxConfig('stdout','math'))
     sandbox.execute(result)
     output = sys.stdout.getvalue()
     sys.stdout = stdout_backup
