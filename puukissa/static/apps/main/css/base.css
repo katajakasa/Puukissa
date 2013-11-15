@@ -9,6 +9,13 @@ body {
     font-size: 14px;
 }
 
+pre {
+    font-family: monospace;
+    border: 1px dotted #cccccc;
+    padding: 5px;
+    background-color: #eeeeee;
+}
+
 p { line-height: 130%; text-align: justify; font-family: 'Open Sans', sans-serif; }
 strong { font-weight: bold; }
 sup { font-size: 75%; vertical-align: super; }
